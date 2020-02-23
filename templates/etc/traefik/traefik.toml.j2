@@ -1,0 +1,55 @@
+# see https://docs.traefik.io/reference/static-configuration/file/
+[providers.docker]
+  exposedByDefault = false
+  watch = true
+
+[providers.file]
+  filename = "/etc/traefik/traefik.toml"
+
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+  [entryPoints.websecure]
+    address = ":443"
+
+#-------------------------------------------------------------------
+# Configure SSL certificates
+#-------------------------------------------------------------------
+{% if traefik_use_letsencrypt %}
+[[tls.certificates]]
+    # Use letsencrypt wildcard certificate
+    certFile = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+    keyFile  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
+{% endif %}
+
+#-------------------------------------------------------------------
+# Redirect http to https
+#-------------------------------------------------------------------
+[http.routers]
+  [http.routers.https-redirect]
+  rule = "HostRegexp(`{any:.*}`)"
+  middlewares = ["https-redirect"]
+  service = "dummy"
+  entryPoints = ["web"]
+
+[http.middlewares]
+  [http.middlewares.https-redirect.redirectscheme]
+    scheme = "https"
+  [http.middlewares.whitelist.ipWhiteList]
+    sourceRange = {{ traefik_whitelist | to_json }}
+
+[http.services]
+  [http.services.dummy.LoadBalancer]
+     [[http.services.dummy.LoadBalancer.servers]]
+        url = ""
+
+
+#-------------------------------------------------------------------
+# Redirect http to https
+#-------------------------------------------------------------------
+{% if traefik_ui_enabled %}
+[api]
+  insecure = true
+{% endif %}
+
+[accessLog]

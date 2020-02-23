@@ -1,0 +1,7 @@
+traefik_version: 2.1.4
+traefik_arch: amd64
+
+traefik_use_letsencrypt: false
+traefik_ui_enabled: true
+
+traefik_whitelist: ['127.0.0.1/32', '192.168.0.0/16', '172.17.0.0/16']

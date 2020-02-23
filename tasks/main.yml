@@ -1,0 +1,59 @@
+---
+
+#-----------------------------------------------------------
+# Install traefik
+#-----------------------------------------------------------
+- name: Creates /opt/traefik directory
+  file:
+    path: /opt/traefik
+    state: directory
+
+- name: "Test if /opt/traefik/traefik exists"
+  stat:
+    path: /opt/traefik/traefik
+  register: traefik_file
+
+- name: "Retreive traefik version"
+  shell: "/opt/traefik/traefik version"
+  register: traefik_help
+  when: traefik_file.stat.exists
+
+- name: "Display traefik version"
+  debug:
+    msg: "{{ traefik_help.stdout_lines[0] }}"
+  when: traefik_file.stat.exists
+
+- name: Install traefik binary if not installed or if version differs
+  unarchive:
+    src: "https://github.com/containous/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_linux_{{ traefik_arch }}.tar.gz"
+    dest: /opt/traefik
+    remote_src: yes
+  when: not traefik_file.stat.exists or traefik_help.stdout_lines[0] is not search(traefik_version)
+
+#-----------------------------------------------------------
+# Configure traefik
+#-----------------------------------------------------------
+- name: Creates /etc/traefik directory
+  file:
+    path: /etc/traefik
+    state: directory
+
+- name: Generate /etc/traefik/traefik.toml
+  template:
+    src: etc/traefik/traefik.toml.j2
+    dest: /etc/traefik/traefik.toml
+
+#-----------------------------------------------------------
+# Create and start systemd service
+#-----------------------------------------------------------
+- name: Generate /etc/systemd/system/traefik.service
+  template:
+    src: etc/systemd/system/traefik.service.j2
+    dest: /etc/systemd/system/traefik.service
+
+- name: Start traefik service
+  systemd:
+    name: traefik
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

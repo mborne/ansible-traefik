@@ -1,0 +1,11 @@
+[Unit]
+Description=traefik
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/traefik/traefik --config /etc/traefik/traefik.toml
+PIDFile=/var/run/traefik.pid
+
+[Install]
+WantedBy=multi-user.target

@@ -15,12 +15,36 @@
 #-------------------------------------------------------------------
 # Configure SSL certificates
 #-------------------------------------------------------------------
-{% if traefik_use_letsencrypt %}
+{% if traefik_ssl_cert != ""  and traefik_ssl_key != "" %}
 [[tls.certificates]]
     # Use letsencrypt wildcard certificate
-    certFile = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
-    keyFile  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
+    certFile = {{ traefik_ssl_cert | to_json }}
+    keyFile  = {{ traefik_ssl_key | to_json }}
 {% endif %}
+
+
+[http.middlewares]
+  #-------------------------------------------------------------------
+  # Middleware to redirect http to https
+  #-------------------------------------------------------------------
+  [http.middlewares.https-redirect.redirectscheme]
+    scheme = "https"
+  #-------------------------------------------------------------------
+  # Middleware to filter by IP
+  #-------------------------------------------------------------------
+  [http.middlewares.whitelist.ipWhiteList]
+    sourceRange = {{ traefik_whitelist | to_json }}
+  #-------------------------------------------------------------------
+  # Middleware to add security headers
+  # (see https://securityheaders.com/)
+  #-------------------------------------------------------------------
+  [http.middlewares.security-headers.headers]
+    [http.middlewares.security-headers.headers.customResponseHeaders]
+      X-Frame-Options = "SAMEORIGIN"
+      Strict-Transport-Security = 'max-age=31536000; includeSubDomains'
+      X-Content-Type-Options = "nosniff"
+      Referrer-Policy = "strict-origin"
+
 
 #-------------------------------------------------------------------
 # Redirect http to https
@@ -32,12 +56,6 @@
   service = "dummy"
   entryPoints = ["web"]
 
-[http.middlewares]
-  [http.middlewares.https-redirect.redirectscheme]
-    scheme = "https"
-  [http.middlewares.whitelist.ipWhiteList]
-    sourceRange = {{ traefik_whitelist | to_json }}
-
 [http.services]
   [http.services.dummy.LoadBalancer]
      [[http.services.dummy.LoadBalancer.servers]]
@@ -45,7 +63,7 @@
 
 
 #-------------------------------------------------------------------
-# Redirect http to https
+# Enable traefik ui
 #-------------------------------------------------------------------
 {% if traefik_ui_enabled %}
 [api]

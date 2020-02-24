@@ -1,7 +1,23 @@
+#--------------------------------------------------------------------------------------
+# Properties to download traefik binary from github
+#--------------------------------------------------------------------------------------
 traefik_version: 2.1.4
 traefik_arch: amd64
 
-traefik_use_letsencrypt: false
-traefik_ui_enabled: true
+#--------------------------------------------------------------------------------------
+# optional cert/key pair allowing to use of a pre-generated wildcard certificate
+# traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+# traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
+#--------------------------------------------------------------------------------------
+traefik_ssl_cert: ~
+traefik_ssl_key: ~
 
+#--------------------------------------------------------------------------------------
+# Allows to enable traefik ui
+#--------------------------------------------------------------------------------------
+traefik_ui_enabled: false
+
+#--------------------------------------------------------------------------------------
+# IP list for whitelist@file middleware
+#--------------------------------------------------------------------------------------
 traefik_whitelist: ['127.0.0.1/32', '192.168.0.0/16', '172.17.0.0/16']

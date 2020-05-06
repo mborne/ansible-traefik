@@ -15,7 +15,7 @@
 #-------------------------------------------------------------------
 # Configure SSL certificates
 #-------------------------------------------------------------------
-{% if traefik_ssl_cert != ""  and traefik_ssl_key != "" %}
+{% if traefik_ssl_cert is not none and traefik_ssl_key is not none %}
 [[tls.certificates]]
     # Use letsencrypt wildcard certificate
     certFile = {{ traefik_ssl_cert | to_json }}

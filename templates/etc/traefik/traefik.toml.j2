@@ -9,6 +9,12 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+{% if traefik_ssl_redirect_all|bool %}
+  # redirect http to https
+  [entryPoints.web.http.redirections.entryPoint]
+    to = "websecure"
+    scheme = "https"
+{% endif %}
   [entryPoints.websecure]
     address = ":443"
 
@@ -41,26 +47,10 @@
   [http.middlewares.security-headers.headers]
     [http.middlewares.security-headers.headers.customResponseHeaders]
       X-Frame-Options = "SAMEORIGIN"
-      Strict-Transport-Security = 'max-age=31536000; includeSubDomains'
+      #Strict-Transport-Security = 'max-age=31536000; includeSubDomains'
+      Strict-Transport-Security = 'max-age=31536000;'
       X-Content-Type-Options = "nosniff"
       Referrer-Policy = "strict-origin"
-
-
-#-------------------------------------------------------------------
-# Redirect http to https
-#-------------------------------------------------------------------
-[http.routers]
-  [http.routers.https-redirect]
-  rule = "HostRegexp(`{any:.*}`)"
-  middlewares = ["https-redirect"]
-  service = "dummy"
-  entryPoints = ["web"]
-
-[http.services]
-  [http.services.dummy.LoadBalancer]
-     [[http.services.dummy.LoadBalancer.servers]]
-        url = ""
-
 
 #-------------------------------------------------------------------
 # Enable traefik ui

@@ -15,8 +15,10 @@
     to = "websecure"
     scheme = "https"
 {% endif %}
+{% if traefik_ssl_enabled %}
   [entryPoints.websecure]
     address = ":443"
+{% endif %}
 
 #-------------------------------------------------------------------
 # Configure SSL certificates
@@ -47,17 +49,23 @@
   [http.middlewares.security-headers.headers]
     [http.middlewares.security-headers.headers.customResponseHeaders]
       X-Frame-Options = "SAMEORIGIN"
-      #Strict-Transport-Security = 'max-age=31536000; includeSubDomains'
       Strict-Transport-Security = 'max-age=31536000;'
       X-Content-Type-Options = "nosniff"
       Referrer-Policy = "strict-origin"
 
 #-------------------------------------------------------------------
-# Enable traefik ui
+# API and dashboard
 #-------------------------------------------------------------------
-{% if traefik_ui_enabled %}
+{% if traefik_api_enabled %}
 [api]
-  insecure = true
+  insecure = {{ traefik_api_insecure | to_json }}
+  dashboard = {{ traefik_api_dashboard | to_json }}
+  debug = {{ traefik_api_debug | to_json }}
 {% endif %}
 
+#-------------------------------------------------------------------
+# Logs
+#-------------------------------------------------------------------
+{% if traefik_accesslog_enabled %}
 [accessLog]
+{% endif %}

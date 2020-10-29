@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------
 # Properties to download traefik binary from github
 #--------------------------------------------------------------------------------------
-traefik_version: 2.2.1
+traefik_version: 2.3.2
 traefik_arch: amd64
 
 #--------------------------------------------------------------------------------------
@@ -9,14 +9,28 @@ traefik_arch: amd64
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 # traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
 #--------------------------------------------------------------------------------------
+traefik_ssl_enabled: true
 traefik_ssl_cert: ~
 traefik_ssl_key: ~
 traefik_ssl_redirect_all: true
 
 #--------------------------------------------------------------------------------------
-# Allows to enable traefik ui
+# API and dashboard
+# see https://doc.traefik.io/traefik/operations/api/#api
 #--------------------------------------------------------------------------------------
-traefik_ui_enabled: false
+traefik_api_enabled: false
+# API will be available directly on the entryPoint named traefik.
+traefik_api_insecure: false
+# Enable the dashboard
+traefik_api_dashboard: true
+# Enable additional endpoints for debugging and profiling, served under /debug/.
+traefik_api_debug: false
+
+#--------------------------------------------------------------------------------------
+# Logs
+# see https://doc.traefik.io/traefik/operations/api/#api
+#--------------------------------------------------------------------------------------
+traefik_accesslog_enabled: true
 
 #--------------------------------------------------------------------------------------
 # IP list for whitelist@file middleware

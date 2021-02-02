@@ -30,7 +30,7 @@ traefik_api_debug: false
 # Logs
 # see https://doc.traefik.io/traefik/operations/api/#api
 #--------------------------------------------------------------------------------------
-traefik_accesslog_enabled: true
+traefik_accesslog_enabled: false
 
 #--------------------------------------------------------------------------------------
 # IP list for whitelist@file middleware

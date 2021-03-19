@@ -57,6 +57,14 @@
 # API and dashboard
 #-------------------------------------------------------------------
 {% if traefik_api_enabled %}
+[http.routers.traefik]
+  rule = "Host(`{{ traefik_domain_name }}`)"
+  service = "api@internal"
+  {% if traefik_ssl_enabled %}
+  tls = true
+  {% endif %}
+  middlewares = ["whitelist@file"]
+
 [api]
   insecure = {{ traefik_api_insecure | to_json }}
   dashboard = {{ traefik_api_dashboard | to_json }}

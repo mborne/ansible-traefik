@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------
 # Properties to download traefik binary from github
 #--------------------------------------------------------------------------------------
-traefik_version: 2.4.0
+traefik_version: 2.4.7
 traefik_arch: amd64
 
 #--------------------------------------------------------------------------------------
@@ -19,6 +19,7 @@ traefik_ssl_redirect_all: true
 # see https://doc.traefik.io/traefik/operations/api/#api
 #--------------------------------------------------------------------------------------
 traefik_api_enabled: false
+traefik_domain_name: traefik.localhost
 # API will be available directly on the entryPoint named traefik.
 traefik_api_insecure: false
 # Enable the dashboard

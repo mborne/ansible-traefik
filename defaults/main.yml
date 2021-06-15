@@ -1,7 +1,8 @@
 #--------------------------------------------------------------------------------------
 # Properties to download traefik binary from github
 #--------------------------------------------------------------------------------------
-traefik_version: 2.4.7
+traefik_version: 2.4.8
+# allows to switch to armv7 for raspberries
 traefik_arch: amd64
 
 #--------------------------------------------------------------------------------------
@@ -14,13 +15,16 @@ traefik_ssl_cert: ~
 traefik_ssl_key: ~
 traefik_ssl_redirect_all: true
 
+# TODO add option to enable acme
+# https://doc.traefik.io/traefik/https/acme/#configuration-examples
+
 #--------------------------------------------------------------------------------------
 # API and dashboard
 # see https://doc.traefik.io/traefik/operations/api/#api
 #--------------------------------------------------------------------------------------
 traefik_api_enabled: false
 traefik_domain_name: traefik.localhost
-# API will be available directly on the entryPoint named traefik.
+# API will be available directly on the entryPoint named traefik (port 8080).
 traefik_api_insecure: false
 # Enable the dashboard
 traefik_api_dashboard: true
@@ -28,8 +32,8 @@ traefik_api_dashboard: true
 traefik_api_debug: false
 
 #--------------------------------------------------------------------------------------
-# Logs
-# see https://doc.traefik.io/traefik/operations/api/#api
+# access logs
+# see https://doc.traefik.io/traefik/observability/access-logs/
 #--------------------------------------------------------------------------------------
 traefik_accesslog_enabled: false
 

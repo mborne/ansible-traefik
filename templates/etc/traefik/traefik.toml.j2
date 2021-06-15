@@ -37,11 +37,20 @@
   #-------------------------------------------------------------------
   [http.middlewares.https-redirect.redirectscheme]
     scheme = "https"
+
   #-------------------------------------------------------------------
   # Middleware to filter by IP
   #-------------------------------------------------------------------
   [http.middlewares.whitelist.ipWhiteList]
     sourceRange = {{ traefik_whitelist | to_json }}
+
+  #-------------------------------------------------------------------
+  # Middleware to add cors headers
+  #-------------------------------------------------------------------
+  [http.middlewares.cors.headers]
+    accessControlAllowMethods= ["GET", "OPTIONS", "PUT", "POST", "DELETE"]
+    accessControlAllowOrigin = "*"
+
   #-------------------------------------------------------------------
   # Middleware to add security headers
   # (see https://securityheaders.com/)

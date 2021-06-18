@@ -1,6 +1,6 @@
 galaxy_info:
   author: mborne
-  description: Install and configure traefik as a binary
+  description: Download and configure traefik as a systemd service
 
   license: MIT
 

@@ -5,14 +5,16 @@ traefik_version: 2.4.8
 # allows to switch to armv7 for raspberries
 traefik_arch: amd64
 
+# enables https creating a websecure entryPoint
+traefik_ssl_enabled: true
 #--------------------------------------------------------------------------------------
-# optional cert/key pair allowing to use of a pre-generated wildcard certificate
+# Optional cert/key pair allowing to use of a pre-generated wildcard certificate
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 # traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
 #--------------------------------------------------------------------------------------
-traefik_ssl_enabled: true
 traefik_ssl_cert: ~
 traefik_ssl_key: ~
+# Redirect all http requests to https
 traefik_ssl_redirect_all: true
 
 # TODO add option to enable acme
@@ -23,6 +25,7 @@ traefik_ssl_redirect_all: true
 # see https://doc.traefik.io/traefik/operations/api/#api
 #--------------------------------------------------------------------------------------
 traefik_api_enabled: false
+# Exposition domain for the traefik UI (IP whitelist@file is enabled)
 traefik_domain_name: traefik.localhost
 # API will be available directly on the entryPoint named traefik (port 8080).
 traefik_api_insecure: false
@@ -38,6 +41,6 @@ traefik_api_debug: false
 traefik_accesslog_enabled: false
 
 #--------------------------------------------------------------------------------------
-# IP list for whitelist@file middleware
+# Default IP list defining whitelist@file middleware
 #--------------------------------------------------------------------------------------
 traefik_whitelist: ['127.0.0.1/32', '192.168.0.0/16', '172.17.0.0/16']

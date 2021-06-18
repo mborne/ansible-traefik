@@ -43,6 +43,11 @@
     src: etc/traefik/traefik.toml.j2
     dest: /etc/traefik/traefik.toml
 
+- name: Create /etc/traefik/conf.d for dynamic configs
+  file:
+    path: /etc/traefik/conf.d
+    state: directory
+
 #-----------------------------------------------------------
 # Create and start systemd service
 #-----------------------------------------------------------

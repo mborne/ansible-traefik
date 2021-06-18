@@ -4,7 +4,9 @@
   watch = true
 
 [providers.file]
-  filename = "/etc/traefik/traefik.toml"
+  # includes /etc/traefik/traefik.toml and other dynamic files
+  directory = "/etc/traefik"
+  watch = true
 
 [entryPoints]
   [entryPoints.web]

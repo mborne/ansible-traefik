@@ -1,6 +1,6 @@
 # ansible-traefik
 
-Ansible playbook to deploy [traefik](https://doc.traefik.io/traefik/) **for a DEV usage**.
+Ansible playbook to deploy [traefik](https://doc.traefik.io/traefik/) as a systemd service **for a DEV usage**.
 
 ## Description
 

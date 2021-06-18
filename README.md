@@ -1,6 +1,6 @@
 # ansible-traefik
 
-Ansible playbook to deploy traefik for a DEV usage.
+Ansible playbook to deploy [traefik](https://doc.traefik.io/traefik/) **for a DEV usage**.
 
 ## Description
 
@@ -52,4 +52,4 @@ For example, a dedicated traefik user should be used to run the service (so it m
 
 ## License
 
-MIT
+[MIT](LICENSE)

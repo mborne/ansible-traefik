@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------
 # Properties to download traefik binary from github
 #--------------------------------------------------------------------------------------
-traefik_version: 2.4.8
+traefik_version: 2.5.4
 # allows to switch to armv7 for raspberries
 traefik_arch: amd64
 

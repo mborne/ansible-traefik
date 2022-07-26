@@ -26,7 +26,7 @@ traefik_ssl_redirect_all: true
 #--------------------------------------------------------------------------------------
 traefik_api_enabled: false
 # Exposition domain for the traefik UI (IP whitelist@file is enabled)
-traefik_domain_name: traefik.localhost
+traefik_domain_name: traefik.dev.localhost
 # API will be available directly on the entryPoint named traefik (port 8080).
 traefik_api_insecure: false
 # Enable the dashboard

@@ -11,13 +11,13 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+{% if traefik_ssl_enabled|bool %}
 {% if traefik_ssl_redirect_all|bool %}
   # redirect http to https
   [entryPoints.web.http.redirections.entryPoint]
     to = "websecure"
     scheme = "https"
 {% endif %}
-{% if traefik_ssl_enabled %}
   [entryPoints.websecure]
     address = ":443"
   [entryPoints.websecure.http]
@@ -27,7 +27,7 @@
 #-------------------------------------------------------------------
 # Configure SSL certificates
 #-------------------------------------------------------------------
-{% if traefik_ssl_cert is not none and traefik_ssl_key is not none %}
+{% if traefik_ssl_enabled|bool and traefik_ssl_cert is not none and traefik_ssl_key is not none %}
 [[tls.certificates]]
     # Use letsencrypt wildcard certificate
     certFile = {{ traefik_ssl_cert | to_json }}
@@ -43,7 +43,7 @@
     scheme = "https"
 
   #-------------------------------------------------------------------
-  # Middleware to filter by IP
+  # Middleware to filter by IP with a main whitelist
   #-------------------------------------------------------------------
   [http.middlewares.whitelist.ipWhiteList]
     sourceRange = {{ traefik_whitelist | to_json }}

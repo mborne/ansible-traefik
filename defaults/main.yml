@@ -14,13 +14,9 @@ traefik_ssl_redirect_all: false
 # Optional cert/key pair allowing to use of a pre-generated wildcard certificate
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 # traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
-# Alternative : /etc/traefik/conf.d/tls-certificates.toml
 #--------------------------------------------------------------------------------------
 traefik_ssl_cert: ~
 traefik_ssl_key: ~
-
-# TODO add option to enable acme
-# https://doc.traefik.io/traefik/https/acme/#configuration-examples
 
 #--------------------------------------------------------------------------------------
 # API and dashboard

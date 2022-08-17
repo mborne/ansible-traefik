@@ -15,7 +15,7 @@ traefik_ssl_enabled: true
 traefik_ssl_cert: ~
 traefik_ssl_key: ~
 # Redirect all http requests to https
-traefik_ssl_redirect_all: true
+traefik_ssl_redirect_all: false
 
 # TODO add option to enable acme
 # https://doc.traefik.io/traefik/https/acme/#configuration-examples

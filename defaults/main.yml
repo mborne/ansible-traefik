@@ -1,12 +1,15 @@
 #--------------------------------------------------------------------------------------
 # Properties to download traefik binary from github
 #--------------------------------------------------------------------------------------
-traefik_version: 2.5.4
+traefik_version: 2.8.3
 # allows to switch to armv7 for raspberries
 traefik_arch: amd64
 
 # enables https creating a websecure entryPoint
 traefik_ssl_enabled: true
+# Redirect all http requests to https
+traefik_ssl_redirect_all: false
+
 #--------------------------------------------------------------------------------------
 # Optional cert/key pair allowing to use of a pre-generated wildcard certificate
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
@@ -14,11 +17,6 @@ traefik_ssl_enabled: true
 #--------------------------------------------------------------------------------------
 traefik_ssl_cert: ~
 traefik_ssl_key: ~
-# Redirect all http requests to https
-traefik_ssl_redirect_all: true
-
-# TODO add option to enable acme
-# https://doc.traefik.io/traefik/https/acme/#configuration-examples
 
 #--------------------------------------------------------------------------------------
 # API and dashboard
@@ -26,7 +24,7 @@ traefik_ssl_redirect_all: true
 #--------------------------------------------------------------------------------------
 traefik_api_enabled: false
 # Exposition domain for the traefik UI (IP whitelist@file is enabled)
-traefik_domain_name: traefik.localhost
+traefik_domain_name: traefik.dev.localhost
 # API will be available directly on the entryPoint named traefik (port 8080).
 traefik_api_insecure: false
 # Enable the dashboard

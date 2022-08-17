@@ -24,27 +24,9 @@ When traefik is deployed as a service :
 
 ### Additional configs
 
-The whole `/etc/traefik/` directory is watched by traefik. You may add config files like `/etc/traefik/rate-limit.toml` :
+The whole `/etc/traefik/` directory is watched by traefik. You may add extra config files in `/etc/traefik/conf.d` directory.
 
-```toml
-[http.middlewares]
-  [http.middlewares.test-ratelimit.rateLimit]
-    average = 100
-    burst = 50
-```
-
-### LetsEncrypt wildcards with DNS
-
-For `traefik_ssl_cert` and `traefik_ssl_key`, note that the following command allows to generate a LetsEncrypt wildcard certificate for `*.example.net` with a [DNS challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge) :
-
-```bash
-sudo certbot certonly --cert-name example.net \
-  --server https://acme-v02.api.letsencrypt.org/directory \
-  --preferred-challenges dns \
-  --manual -d '*.example.net'
-```
-
-(See also [lego](https://go-acme.github.io/lego/) to avoid manual registration of a TXT entry on the DNS.)
+See [docs/sample-configs.md](docs/sample-config.md).
 
 ## Warning
 

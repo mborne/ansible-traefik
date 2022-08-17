@@ -7,15 +7,17 @@ traefik_arch: amd64
 
 # enables https creating a websecure entryPoint
 traefik_ssl_enabled: true
+# Redirect all http requests to https
+traefik_ssl_redirect_all: false
+
 #--------------------------------------------------------------------------------------
 # Optional cert/key pair allowing to use of a pre-generated wildcard certificate
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 # traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
+# Alternative : /etc/traefik/conf.d/tls-certificates.toml
 #--------------------------------------------------------------------------------------
 traefik_ssl_cert: ~
 traefik_ssl_key: ~
-# Redirect all http requests to https
-traefik_ssl_redirect_all: false
 
 # TODO add option to enable acme
 # https://doc.traefik.io/traefik/https/acme/#configuration-examples

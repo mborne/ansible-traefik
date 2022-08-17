@@ -20,6 +20,8 @@
 {% if traefik_ssl_enabled %}
   [entryPoints.websecure]
     address = ":443"
+  [entryPoints.websecure.http]
+    tls = true
 {% endif %}
 
 #-------------------------------------------------------------------
@@ -71,9 +73,6 @@
 [http.routers.traefik]
   rule = "Host(`{{ traefik_domain_name }}`)"
   service = "api@internal"
-  {% if traefik_ssl_enabled %}
-  tls = true
-  {% endif %}
   middlewares = ["whitelist@file"]
 
 [api]

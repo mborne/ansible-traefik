@@ -1,0 +1,106 @@
+# see https://docs.traefik.io/reference/static-configuration/file/
+providers:
+  docker:
+    exposedByDefault: false
+    watch: true
+  # includes /etc/traefik/traefik.toml and other dynamic files  
+  file:
+    directory: "/etc/traefik"
+    watch: true
+
+entryPoints:
+  web:
+    address: ":80"
+{% if traefik_ssl_redirect_all|bool %}
+    http:
+      redirections:
+        entryPoint:
+          to: "websecure"
+          scheme: "https"
+{% endif %}
+  websecure:
+    address: ":443"
+    http:
+      tls: {}
+
+#-------------------------------------------------------------------
+# Configure default TLS certificates
+#-------------------------------------------------------------------
+{% if traefik_ssl_enabled|bool and traefik_ssl_cert is not none and traefik_ssl_key is not none %}
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: {{ traefik_ssl_cert | to_json }}
+        keyFile: {{ traefik_ssl_key | to_json }}
+{% endif %}
+
+#-------------------------------------------------------------------
+# API and dashboard
+#-------------------------------------------------------------------
+api:
+  insecure: {{ traefik_api_insecure | to_json }}
+  dashboard: {{ traefik_api_dashboard | to_json }}
+  debug: {{ traefik_api_debug | to_json }}
+
+
+http:
+  middlewares:
+    #--------------------------------------------------------------
+    # whitelist@file to filter by IP according to a main whitelist
+    #--------------------------------------------------------------
+    whitelist:
+      ipWhiteList:
+        sourceRange: {{ traefik_whitelist | to_json }}
+    #--------------------------------------------------------------
+    # cors@file to allow cross origin requests
+    #--------------------------------------------------------------
+    cors:
+      headers:
+        accessControlAllowMethods: ["GET", "OPTIONS", "PUT", "POST", "DELETE"]
+        accessControlAllowOriginList: "*"
+    #--------------------------------------------------------------
+    # https-redirect@file to redirect to https
+    #--------------------------------------------------------------
+    https-redirect:
+      redirectscheme:
+        scheme : "https"
+    #--------------------------------------------------------------
+    # security-headers@file to add some security headers
+    #--------------------------------------------------------------
+    security-headers:
+      headers:
+        customResponseHeaders:
+          # traefik pilot
+          #X-Frame-Options: "SAMEORIGIN"
+          Strict-Transport-Security: 'max-age=31536000;'
+          X-Content-Type-Options: "nosniff"
+          Referrer-Policy: "strict-origin"
+{% if traefik_api_enabled %}
+  routers:
+    traefik:
+      rule: "Host(`{{ traefik_domain_name }}`)"
+      service: "api@internal"
+      middlewares: ["whitelist@file","https-redirect@file"]
+{% endif %}
+
+pilot:
+  dashboard: false
+
+#-------------------------------------------------------------------
+# Logs
+#-------------------------------------------------------------------
+
+# https://doc.traefik.io/traefik/observability/logs/
+# log:
+#  format: "json"
+
+# https://doc.traefik.io/traefik/observability/access-logs/
+{% if traefik_accesslog_enabled %}
+accessLog:
+  format: "json"
+{% endif %}
+
+# https://doc.traefik.io/traefik/observability/metrics/overview/
+# metrics:
+#   prometheus: {}

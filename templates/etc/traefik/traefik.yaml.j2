@@ -97,8 +97,7 @@ pilot:
 
 # https://doc.traefik.io/traefik/observability/access-logs/
 {% if traefik_accesslog_enabled %}
-accessLog:
-  format: "json"
+accessLog: {}
 {% endif %}
 
 # https://doc.traefik.io/traefik/observability/metrics/overview/

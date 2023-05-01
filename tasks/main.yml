@@ -25,7 +25,7 @@
 
 - name: Install traefik binary if not installed or if version differs
   unarchive:
-    src: "https://github.com/containous/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_linux_{{ traefik_arch }}.tar.gz"
+    src: "https://github.com/traefik/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_linux_{{ traefik_arch }}.tar.gz"
     dest: /opt/traefik
     remote_src: yes
   when: not traefik_file.stat.exists or traefik_help.stdout_lines[0] is not search(traefik_version)
@@ -38,10 +38,15 @@
     path: /etc/traefik
     state: directory
 
-- name: Generate /etc/traefik/traefik.toml
+- name: Generate /etc/traefik/traefik.yaml
   template:
-    src: etc/traefik/traefik.toml.j2
-    dest: /etc/traefik/traefik.toml
+    src: etc/traefik/traefik.yaml.j2
+    dest: /etc/traefik/traefik.yaml
+
+- name: Remove old /etc/traefik/traefik.toml
+  file:
+    path: /etc/traefik/traefik.toml
+    state: absent
 
 - name: Create /etc/traefik/conf.d for dynamic configs
   file:

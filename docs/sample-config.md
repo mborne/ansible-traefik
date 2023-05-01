@@ -1,4 +1,6 @@
-# Traefik - sample config files
+# Traefik - Sample additional config files
+
+You may add extra config files in `/etc/traefik/conf.d` directory.
 
 ## Define a rateLimit middleware
 

@@ -1,10 +1,10 @@
 # ansible-traefik
 
-Ansible playbook to deploy [traefik](https://doc.traefik.io/traefik/) as a systemd service **for a DEV usage**.
+Ansible playbook to deploy [Traefik](https://doc.traefik.io/traefik/) as a systemd service **for a DEV usage**.
 
 ## Description
 
-* Download traefik binary from [github releases](https://github.com/traefik/traefik/tags) (`/opt/traefik/traefik`)
+* Download binary from [github releases](https://github.com/traefik/traefik/tags) (`/opt/traefik/traefik`)
 * Create a systemd service (`/etc/systemd/system/traefik.service`)
 * Configure traefik focussing on the exposition of docker containers running on a single host (`/etc/traefik/traefik.toml`)
 
@@ -24,9 +24,14 @@ When traefik is deployed as a service :
 
 ### Additional configs
 
-The whole `/etc/traefik/` directory is watched by traefik. You may add extra config files in `/etc/traefik/conf.d` directory.
+You may add extra config files in `/etc/traefik/conf.d` directory.
 
 See [docs/sample-configs.md](docs/sample-config.md).
+
+### Troubleshooting
+
+* [Failed to allocate directory watch: Too many open files](docs/too-many-open-files.md)
+
 
 ## Warning
 

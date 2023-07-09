@@ -22,6 +22,8 @@ entryPoints:
     address: ":443"
     http:
       tls: {}
+  traefik:
+    address: ":{{ traefik_api_port }}"
 
 #-------------------------------------------------------------------
 # Configure default TLS certificates

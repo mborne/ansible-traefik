@@ -25,6 +25,8 @@ traefik_ssl_key: ~
 # see https://doc.traefik.io/traefik/operations/api/#api
 #--------------------------------------------------------------------------------------
 traefik_api_enabled: false
+# Port for traefik endpoint
+traefik_api_port: 8080
 # Exposition domain for the traefik UI (IP whitelist@file is enabled)
 traefik_domain_name: traefik.dev.localhost
 # API will be available directly on the entryPoint named traefik (port 8080).

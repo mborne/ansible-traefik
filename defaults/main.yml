@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------------
 # Properties to download traefik binary from github
 #--------------------------------------------------------------------------------------
-traefik_version: 2.10.1
+traefik_version: 2.10.3
 # allows to switch to armv7 for raspberries
 traefik_arch: amd64
 
@@ -12,6 +12,8 @@ traefik_ssl_redirect_all: false
 
 #--------------------------------------------------------------------------------------
 # Optional cert/key pair allowing to use of a pre-generated wildcard certificate
+# as the default cert.
+#
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 # traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
 #--------------------------------------------------------------------------------------
@@ -32,11 +34,24 @@ traefik_api_dashboard: true
 # Enable additional endpoints for debugging and profiling, served under /debug/.
 traefik_api_debug: false
 
+#-------------------------------------------------------------------
+# Logs
+# https://doc.traefik.io/traefik/observability/logs/
+#-------------------------------------------------------------------
+traefik_log_level: ERROR
+
 #--------------------------------------------------------------------------------------
 # access logs
 # see https://doc.traefik.io/traefik/observability/access-logs/
 #--------------------------------------------------------------------------------------
 traefik_accesslog_enabled: false
+
+#--------------------------------------------------------------------------------------
+# Metrics
+# see https://doc.traefik.io/traefik/observability/metrics/overview/
+#--------------------------------------------------------------------------------------
+traefik_prometheus_enabled: true
+
 
 #--------------------------------------------------------------------------------------
 # Default IP list defining whitelist@file middleware

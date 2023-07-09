@@ -1,11 +1,11 @@
+---
 # see https://docs.traefik.io/reference/static-configuration/file/
 providers:
   docker:
     exposedByDefault: false
     watch: true
-  # includes /etc/traefik/traefik.toml and other dynamic files  
   file:
-    directory: "/etc/traefik/conf.d"
+    directory: "/etc/traefik"
     watch: true
 
 entryPoints:
@@ -47,7 +47,7 @@ api:
 http:
   middlewares:
     #--------------------------------------------------------------
-    # whitelist@file to filter by IP according to a main whitelist
+    # global whitelist
     #--------------------------------------------------------------
     whitelist:
       ipWhiteList:
@@ -82,24 +82,24 @@ http:
       rule: "Host(`{{ traefik_domain_name }}`)"
       service: "api@internal"
       middlewares: ["whitelist@file","https-redirect@file"]
+    metrics:
+      rule: "Host(`{{ traefik_domain_name }}`) && PathPrefix(`/metrics`)"
+      service: "prometheus@internal"
+      middlewares: ["whitelist@file","https-redirect@file"]
 {% endif %}
 
 pilot:
   dashboard: false
 
-#-------------------------------------------------------------------
-# Logs
-#-------------------------------------------------------------------
+log:
+  #format: "json"
+  level: {{ traefik_log_level }}
 
-# https://doc.traefik.io/traefik/observability/logs/
-# log:
-#  format: "json"
-
-# https://doc.traefik.io/traefik/observability/access-logs/
 {% if traefik_accesslog_enabled %}
 accessLog: {}
 {% endif %}
 
-# https://doc.traefik.io/traefik/observability/metrics/overview/
-# metrics:
-#   prometheus: {}
+{% if traefik_prometheus_enabled %}
+metrics:
+  prometheus: {}
+{% endif %}

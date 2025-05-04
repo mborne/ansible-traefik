@@ -43,9 +43,15 @@ traefik_log_level: ERROR
 
 #--------------------------------------------------------------------------------------
 # access logs
-# see https://doc.traefik.io/traefik/observability/access-logs/
 #--------------------------------------------------------------------------------------
+
+# enable accessLog ?
 traefik_accesslog_enabled: false
+# accessLog configuration
+# see https://doc.traefik.io/traefik/observability/access-logs/
+traefik_accesslog_config:
+  format: common
+
 
 #--------------------------------------------------------------------------------------
 # Metrics

@@ -98,7 +98,8 @@ log:
   level: {{ traefik_log_level }}
 
 {% if traefik_accesslog_enabled %}
-accessLog: {}
+accessLog:
+  {{ traefik_accesslog_config | to_nice_yaml | indent(2) }}
 {% endif %}
 
 {% if traefik_prometheus_enabled %}

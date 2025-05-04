@@ -1,10 +1,7 @@
-#--------------------------------------------------------------------------------------
-# Properties to download traefik binary from github
-#--------------------------------------------------------------------------------------
-
+# traefik binary version
 # see https://github.com/traefik/traefik/releases
 traefik_version: 2.11.24
-# allows to switch to armv7 for raspberries
+# allows to switch to armv7 or arm64 for raspberries
 traefik_arch: amd64
 
 # enables https creating a websecure entryPoint

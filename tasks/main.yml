@@ -1,69 +1,79 @@
 ---
 
-#-----------------------------------------------------------
-# Install traefik
-#-----------------------------------------------------------
 - name: Creates /opt/traefik directory
-  file:
+  ansible.builtin.file:
     path: /opt/traefik
     state: directory
+    mode: '0755'
 
 - name: "Test if /opt/traefik/traefik exists"
-  stat:
+  ansible.builtin.stat:
     path: /opt/traefik/traefik
   register: traefik_file
 
 - name: "Retreive traefik version"
-  shell: "/opt/traefik/traefik version"
+  ansible.builtin.command: "/opt/traefik/traefik version"
   register: traefik_help
   when: traefik_file.stat.exists
+  changed_when: false
+  check_mode: false
 
 - name: "Display traefik version"
-  debug:
+  ansible.builtin.debug:
     msg: "{{ traefik_help.stdout_lines[0] }}"
   when: traefik_file.stat.exists
 
 - name: Install traefik binary if not installed or if version differs
-  unarchive:
+  ansible.builtin.unarchive:
     src: "https://github.com/traefik/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_linux_{{ traefik_arch }}.tar.gz"
     dest: /opt/traefik
-    remote_src: yes
+    remote_src: true
   when: not traefik_file.stat.exists or traefik_help.stdout_lines[0] is not search(traefik_version)
 
 #-----------------------------------------------------------
 # Configure traefik
 #-----------------------------------------------------------
 - name: Creates /etc/traefik directory
-  file:
+  ansible.builtin.file:
     path: /etc/traefik
     state: directory
+    mode: '0755'
 
 - name: Generate /etc/traefik/traefik.yaml
-  template:
+  ansible.builtin.template:
     src: etc/traefik/traefik.yaml.j2
     dest: /etc/traefik/traefik.yaml
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Remove old /etc/traefik/traefik.toml
-  file:
+  ansible.builtin.file:
     path: /etc/traefik/traefik.toml
     state: absent
 
 - name: Create /etc/traefik/conf.d for dynamic configs
-  file:
+  ansible.builtin.file:
     path: /etc/traefik/conf.d
     state: directory
+    owner: root
+    group: root
+    mode: '0755'
 
 #-----------------------------------------------------------
 # Create and start systemd service
 #-----------------------------------------------------------
 - name: Generate /etc/systemd/system/traefik.service
-  template:
+  ansible.builtin.template:
     src: etc/systemd/system/traefik.service.j2
     dest: /etc/systemd/system/traefik.service
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: Start traefik service
-  systemd:
+  ansible.builtin.systemd:
     name: traefik
     state: restarted
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true

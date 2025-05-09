@@ -1,9 +1,25 @@
 ---
 
+- name: Ensure group "traefik" exists
+  ansible.builtin.group:
+    name: traefik
+    state: present
+
+- name: Ensure user "traefik" exists
+  ansible.builtin.user:
+    name: traefik
+    group: traefik
+    groups: "{{ traefik_user_groups }}"
+    shell: /sbin/nologin
+    create_home: no
+    state: present
+
 - name: Creates /opt/traefik directory
   ansible.builtin.file:
     path: /opt/traefik
     state: directory
+    owner: root
+    group: root
     mode: '0755'
 
 - name: "Test if /opt/traefik/traefik exists"
@@ -27,6 +43,8 @@
   ansible.builtin.unarchive:
     src: "https://github.com/traefik/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_linux_{{ traefik_arch }}.tar.gz"
     dest: /opt/traefik
+    owner: root
+    group: root
     remote_src: true
   when: not traefik_file.stat.exists or traefik_help.stdout_lines[0] is not search(traefik_version)
 
@@ -37,6 +55,8 @@
   ansible.builtin.file:
     path: /etc/traefik
     state: directory
+    owner: root
+    group: root
     mode: '0755'
 
 - name: Generate /etc/traefik/traefik.yaml

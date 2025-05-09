@@ -9,6 +9,10 @@ traefik_ssl_enabled: true
 # Redirect all http requests to https
 traefik_ssl_redirect_all: false
 
+# additional groups for the traefik user defaulted to [docker]
+# to grant access to /var/run/docker.sock
+traefik_user_groups: [docker]
+
 #--------------------------------------------------------------------------------------
 # Optional cert/key pair allowing to use of a pre-generated wildcard certificate
 # as the default cert.

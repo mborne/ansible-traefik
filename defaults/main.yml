@@ -19,6 +19,8 @@ traefik_user_groups: [docker]
 #
 # traefik_ssl_cert = "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
 # traefik_ssl_key  = "/etc/letsencrypt/live/{{ domain_name }}/privkey.pem"
+#
+# WARNING : traefik user must have read access
 #--------------------------------------------------------------------------------------
 traefik_ssl_cert: ~
 traefik_ssl_key: ~

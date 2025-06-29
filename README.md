@@ -8,6 +8,8 @@ Ansible playbook to deploy [Traefik](https://doc.traefik.io/traefik/) as a syste
 * Create a traefik group and a traefik user
 * Create a systemd service (`/etc/systemd/system/traefik.service`)
 * Configure traefik focussing on the exposition of docker containers running on a single host (`/etc/traefik/traefik.toml`)
+* Create a directory for accessLog storage (`/var/log/traefik/`)
+* Configure logrotate for Traefik
 
 ## Parameters
 

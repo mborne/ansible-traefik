@@ -5,6 +5,7 @@ Ansible playbook to deploy [Traefik](https://doc.traefik.io/traefik/) as a syste
 ## Description
 
 * Download binary from [github releases](https://github.com/traefik/traefik/tags) (`/opt/traefik/traefik`)
+* Create a traefik group and a traefik user
 * Create a systemd service (`/etc/systemd/system/traefik.service`)
 * Configure traefik focussing on the exposition of docker containers running on a single host (`/etc/traefik/traefik.toml`)
 

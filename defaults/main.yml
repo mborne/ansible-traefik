@@ -57,6 +57,17 @@ traefik_accesslog_enabled: false
 # see https://doc.traefik.io/traefik/observability/access-logs/
 traefik_accesslog_config:
   format: common
+  filePath: /var/log/traefik/access.log
+  bufferingSize: 100
+
+#--------------------------------------------------------------------------------------
+# log rotate for /var/log/traefik/*.log
+#--------------------------------------------------------------------------------------
+
+# configure logrotate (i.e. generate /etc/logrotate.d/traefik) ?
+traefik_logrotate_enabled: true
+# number of days to kept logs
+traefik_logrotate_retention: 30 
 
 
 #--------------------------------------------------------------------------------------
@@ -70,3 +81,5 @@ traefik_prometheus_enabled: true
 # Default IP list defining whitelist@file middleware
 #--------------------------------------------------------------------------------------
 traefik_whitelist: ['127.0.0.1/32', '192.168.0.0/16', '172.17.0.0/16']
+
+

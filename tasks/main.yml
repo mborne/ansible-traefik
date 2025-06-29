@@ -80,6 +80,29 @@
     group: root
     mode: '0755'
 
+- name: Create /var/log/traefik for logs
+  ansible.builtin.file:
+    path: /var/log/traefik
+    state: directory
+    owner: traefik
+    group: adm
+    mode: '0750'
+
+- name: Configure logrotate for Traefik
+  template:
+    src: 'etc/logrotate.d/traefik.j2'
+    dest: '/etc/logrotate.d/traefik'
+    owner: root
+    group: root
+    mode: '0644'
+  when: traefik_logrotate_enabled | bool
+
+- name: Remove logrotate configuration for Traefik
+  file:
+    src: 'etc/logrotate.d/traefik.j2'
+    state: absent
+  when: not traefik_logrotate_enabled | bool
+
 #-----------------------------------------------------------
 # Create and start systemd service
 #-----------------------------------------------------------

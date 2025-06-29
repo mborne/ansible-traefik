@@ -1,0 +1,9 @@
+/var/log/traefik/*.log {
+    rotate {{ traefik_logrotate_retention }}
+    daily
+    compress
+    size=1M
+    missingok
+    delaycompress
+    copytruncate
+}

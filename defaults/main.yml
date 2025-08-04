@@ -1,6 +1,6 @@
 # traefik binary version
 # see https://github.com/traefik/traefik/releases
-traefik_version: 3.4.3
+traefik_version: 3.5.0
 # allows to switch to armv7 or arm64 for raspberries
 traefik_arch: amd64
 

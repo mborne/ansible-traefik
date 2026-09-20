@@ -1,0 +1,80 @@
+---
+name: check-traefik-version
+
+# Weekly reminder to keep traefik_version aligned with the latest Traefik release.
+# See https://github.com/mborne/ansible-traefik/issues/12
+on:
+  schedule:
+    # every Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-traefik-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compare traefik_version with the latest Traefik release
+        id: compare
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          current="$(grep -oP '^traefik_version:\s*\K\S+' defaults/main.yml | tr -d "\"'" || true)"
+          if [ -z "$current" ]; then
+            echo "::error file=defaults/main.yml::unable to read traefik_version"
+            exit 1
+          fi
+
+          # /releases/latest excludes drafts and pre-releases
+          latest="$(gh api repos/traefik/traefik/releases/latest --jq .tag_name)"
+          latest="${latest#v}"
+
+          echo "current=$current" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+
+          if [ "$current" = "$latest" ]; then
+            echo "up-to-date=true" >> "$GITHUB_OUTPUT"
+            echo "traefik_version ($current) is up to date." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "up-to-date=false" >> "$GITHUB_OUTPUT"
+            echo "traefik_version ($current) differs from the latest release ($latest)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Open a reminder issue
+        if: steps.compare.outputs.up-to-date == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CURRENT: ${{ steps.compare.outputs.current }}
+          LATEST: ${{ steps.compare.outputs.latest }}
+          WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/workflows/check-traefik-version.yml
+        run: |
+          set -euo pipefail
+
+          title="chore: upgrade traefik_version to $LATEST"
+
+          # do not open a new issue every week for the same version
+          existing="$(gh issue list --state open --limit 100 --json number,title \
+            | jq -r --arg title "$title" 'map(select(.title == $title)) | .[0].number // empty')"
+          if [ -n "$existing" ]; then
+            echo "Issue #$existing already tracks $LATEST." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          {
+            printf 'Traefik [v%s](https://github.com/traefik/traefik/releases/tag/v%s) has been released, ' "$LATEST" "$LATEST"
+            printf 'while `defaults/main.yml` still pins `traefik_version: %s`.\n\n' "$CURRENT"
+            printf 'Before bumping, check the release notes for static configuration changes: '
+            printf '`templates/etc/traefik/traefik.yaml.j2` must stay valid against the new version.\n\n'
+            printf '_Opened automatically by the [check-traefik-version](%s) workflow._\n' "$WORKFLOW_URL"
+          } > issue-body.md
+
+          url="$(gh issue create --title "$title" --body-file issue-body.md)"
+          echo "Opened $url" >> "$GITHUB_STEP_SUMMARY"
